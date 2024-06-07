@@ -1,0 +1,98 @@
+@{
+    ViewData["Title"] = "Análisis de Recomendaciones";
+    var ratings = ViewData["ratings"] as List<(int productoId, float normalizedScore)>;
+    var productos = ViewData["productos"] as List<pc4_progra.Models.Producto>;
+}
+
+<h1>@ViewData["Title"]</h1>
+
+
+
+<div class="row text-center my-4">
+    <div class="col-12 col-md-4">
+        <div class="card">
+            <img src="/img/TheMatrix.jpg" class="card-img-top" alt="Pelicula 1">
+            <div class="card-body">
+                <h5 class="card-title">TheMatrix</h5>
+            </div>
+        </div>
+    </div>
+    <div class="col-12 col-md-4">
+        <div class="card">
+            <img src="/img/TheGodfather.jpg" class="card-img-top" alt="Pelicula 2">
+            <div class="card-body">
+                <h5 class="card-title">TheGodfather</h5>
+            </div>  
+        </div>
+    </div>
+    <div class="col-12 col-md-4">
+        <div class="card">
+            <img src="/img/PulpFiction.jpg" class="card-img-top" alt="Pelicula 3">
+            <div class="card-body">
+                <h5 class="card-title">PulpFiction</h5>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row text-center my-4">
+    <div class="col-12 col-md-4">
+        <div class="card">
+            <img src="/img/thedark.jpg" class="card-img-top" alt="Pelicula 4">
+            <div class="card-body">
+                <h5 class="card-title">The dark nigth</h5>
+            </div>
+        </div>
+    </div>
+    <div class="col-12 col-md-4">
+        <div class="card">
+            <img src="/img/Fight club.jpg" class="card-img-top" alt="Pelicula 5">
+            <div class="card-body">
+                <h5 class="card-title">Fight club</h5>
+            </div>
+        </div>
+    </div>
+    <div class="col-12 col-md-4">
+        <div class="card">
+            <img src="/img/Forrest_Gump_poster.jpg" class="card-img-top" alt="Pelicula 6">
+            <div class="card-body">
+                <h5 class="card-title">Forrest gump</h5>
+            </div>
+        </div>
+    </div>
+</div>
+<form asp-controller="ML" asp-action="Predict" method="post">
+    <div class="form-group">
+        <label for="id">Escribe el Id del usuario</label>
+        <input type="text" class="form-control" id="id" name="id" />
+    </div>
+    <button type="submit" class="btn btn-primary">Enviar</button>
+</form>
+
+@if (ratings != null && productos != null)
+{
+    <h2>Recomendaciones</h2>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Producto</th>
+                <th>Puntuación</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var rating in ratings)
+            {
+                var producto = productos.FirstOrDefault(p => p.ProductoId == rating.productoId);
+                if (producto != null)
+                {
+                    <tr>
+                        <td>@producto.ProductoNombre</td>
+                        <td>@rating.normalizedScore</td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+}
+
+
